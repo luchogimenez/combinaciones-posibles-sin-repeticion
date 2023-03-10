@@ -16,10 +16,6 @@ public class Main {
                     domainsKeys.add(d.keySet().toString().replace('[',' ').replace(']',' ').trim());
                 });
         //
-        System.out.println("cantidad de dominios: "+domains.size());
-        System.out.println("nombres de dominios: "+domainsKeys);
-
-
         List<List<String>> totalComb = new ArrayList<>();
         for (Map<String,List<String>>  domain : domains) {
             List<String> comb = new ArrayList<>();
@@ -33,15 +29,15 @@ public class Main {
         List<List<String>> output = new ArrayList<>();
         cartesianProduct(totalComb, new String[totalComb.size()], 0,output);
         System.out.println("cantidad de combinaciones posibles: "+output.size());
-        System.out.println(output);
+
+        output.forEach(System.out::println);
+
     }
 
     private static void getValuesCombination(List<String> domainValues, int valueQty, String domainKey, List<String> comb) {
         for(int cantSubValues = 1; cantSubValues< valueQty +1; cantSubValues++) {
             combinationWithoutRepetition(domainKey, comb, domainValues, "",cantSubValues , valueQty,0);
         }
-        System.out.println("cant:"+ comb.size());
-        System.out.println("combinaciones"+ comb);
     }
 
     private static void combinationWithoutRepetition(String key,List<String> comb, List<String> values, String act, int subGroup, int valueQty, int y) {
