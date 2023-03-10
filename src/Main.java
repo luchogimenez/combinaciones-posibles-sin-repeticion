@@ -9,7 +9,7 @@ public class Main {
         Map<String, List<String>> currency = Collections
                 .singletonMap("currency", Arrays.asList("ars","usd"));
 
-        Set<Map<String,List<String>>> domains = new HashSet<>(Arrays.asList(channel,currency));
+        Set<Map<String,List<String>>> domains = new HashSet<>(Arrays.asList(channel,currency,functionality));
 
         List<String> domainsKeys = new ArrayList<>();
                 domains.stream().forEach(d->{
@@ -30,7 +30,10 @@ public class Main {
             totalComb.add(comb);
         }
         //System.out.println("totalComb: "+totalComb);
-        cartesianProduct(totalComb, new String[totalComb.size()], 0);
+        List<List<String>> output = new ArrayList<>();
+        cartesianProduct(totalComb, new String[totalComb.size()], 0,output);
+        System.out.println("cantidad de combinaciones posibles: "+output.size());
+        System.out.println(output);
     }
 
     private static void getValuesCombination(List<String> domainValues, int valueQty, String domainKey, List<String> comb) {
@@ -65,16 +68,18 @@ public class Main {
         int cant = list.size();
         return cant;
     }
-    private static void cartesianProduct(List<List<String>> input, String[] current, int k) {
+    private static void cartesianProduct(List<List<String>> input, String[] current, int k, List<List<String>> output) {
         if (k == input.size()) {
+            String comb="";
             for (int i = 0; i < k; i++) {
-                System.out.print(current[i] + ",");
+                comb+=current[i]+ ",";
             }
-            System.out.println();
+            List<String> string = Arrays.asList(comb.split(","));
+            output.add(string);
         } else {
             for (int j = 0; j < input.get(k).size(); j++) {
                 current[k] = input.get(k).get(j);
-                cartesianProduct(input, current, k + 1);
+                cartesianProduct(input, current, k + 1, output);
             }
         }
     }
