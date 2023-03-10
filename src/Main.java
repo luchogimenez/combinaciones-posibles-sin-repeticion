@@ -9,13 +9,17 @@ public class Main {
         Map<String, List<String>> currency = Collections
                 .singletonMap("currency", Arrays.asList("ars","usd"));
 
-        Set<Map<String,List<String>>> domains = new HashSet<>(Arrays.asList(channel,currency,functionality));
+        Set<Map<String,List<String>>> domains = new HashSet<>(Arrays.asList(channel,functionality));
 
         List<String> domainsKeys = new ArrayList<>();
                 domains.stream().forEach(d->{
                     domainsKeys.add(d.keySet().toString().replace('[',' ').replace(']',' ').trim());
                 });
         //
+        System.out.println("cantidad de dominios: "+domains.size());
+        System.out.println("nombres de dominios: "+domainsKeys);
+
+
         List<List<String>> totalComb = new ArrayList<>();
         for (Map<String,List<String>>  domain : domains) {
             List<String> comb = new ArrayList<>();
@@ -38,18 +42,24 @@ public class Main {
         for(int cantSubValues = 1; cantSubValues< valueQty +1; cantSubValues++) {
             combinationWithoutRepetition(domainKey, comb, domainValues, "",cantSubValues , valueQty,0);
         }
+        System.out.println("cant:"+ comb.size());
+        System.out.println("combinaciones"+ comb);
     }
 
-    private static void combinationWithoutRepetition(String key,List<String> comb, List<String> values, String act, int subGroup, int valueQty, int y) {
-        if (subGroup == 0) {
+    private static void combinationWithoutRepetition(String key,List<String> comb, List<String> values, String act, int cantSubValues, int valueQty, int y) {
+        if (cantSubValues == 0) {
             comb.add(act);
         } else {
             for (int i = y; i < valueQty; i++) {
                 if (!act.contains(values.get(i))) { // Controla que no haya repeticiones
                     if (values.size() != 1)
-                        combinationWithoutRepetition(key, comb, values, subGroup == valueQty && i == y ? act + key + "-" + values.get(i) + "," : act + key + "-" + values.get(i), subGroup - 1, valueQty, i + 1);
+                        if(act!="" && i==y && cantSubValues+1!=valueQty) {
+                            act += ",";
+                            combinationWithoutRepetition(key, comb, values, cantSubValues == valueQty && i == y ? act + key + "-" + values.get(i) + "," : act + key + "-" + values.get(i), cantSubValues - 1, valueQty, i + 1);
+                        }else
+                            combinationWithoutRepetition(key, comb, values, cantSubValues == valueQty && i == y ? act + key + "-" + values.get(i) + "," : act + key + "-" + values.get(i), cantSubValues - 1, valueQty, i + 1);
                     else
-                        combinationWithoutRepetition(key, comb, values, act + key + "-" + values.get(i), subGroup - 1, valueQty, i + 1);
+                        combinationWithoutRepetition(key, comb, values, act + key + "-" + values.get(i), cantSubValues - 1, valueQty, i + 1);
                 }
             }
         }
